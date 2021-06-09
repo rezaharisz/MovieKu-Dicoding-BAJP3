@@ -41,31 +41,6 @@ class RemoteDataSource {
         return resultMovies
     }
 
-    fun getMoviesId(id: Int): LiveData<ApiResponse<ResponseDataMovie>>{
-        EspressoIdlingResource.increment()
-        val response = ApiCall.movieApiService.getDetailMovie(id)
-        val resultMoviesId = MutableLiveData<ApiResponse<ResponseDataMovie>>()
-        response.enqueue(object : Callback<ResponseDataMovie> {
-            override fun onResponse(call: Call<ResponseDataMovie>, response: Response<ResponseDataMovie>) {
-                resultMoviesId.value = ApiResponse.success(response.body() as ResponseDataMovie)
-
-                if (!EspressoIdlingResource.idlingResource.isIdleNow){
-                    EspressoIdlingResource.decrement()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseDataMovie>, t: Throwable) {
-                Log.e("MovieDetailViewModel", "Data is Not Available")
-
-                if (!EspressoIdlingResource.idlingResource.isIdleNow){
-                    EspressoIdlingResource.decrement()
-                }
-            }
-
-        })
-        return resultMoviesId
-    }
-
     fun getTvShows(): LiveData<ApiResponse<List<ResponseDataTvShows>>>{
         EspressoIdlingResource.increment()
         val response = ApiCall.movieApiService.getTvShows()
@@ -89,30 +64,4 @@ class RemoteDataSource {
         })
         return resultTvShows
     }
-
-    fun getTvShowsId(id: Int): LiveData<ApiResponse<ResponseDataTvShows>>{
-        EspressoIdlingResource.increment()
-        val response = ApiCall.movieApiService.getDetailTvShows(id)
-        val resultTvShows = MutableLiveData<ApiResponse<ResponseDataTvShows>>()
-        response.enqueue(object : Callback<ResponseDataTvShows>{
-            override fun onResponse(call: Call<ResponseDataTvShows>, response: Response<ResponseDataTvShows>) {
-                resultTvShows.value = ApiResponse.success(response.body() as ResponseDataTvShows)
-
-                if (!EspressoIdlingResource.idlingResource.isIdleNow){
-                    EspressoIdlingResource.decrement()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseDataTvShows>, t: Throwable) {
-                Log.e("TvShowsDetailViewModel", "Data is Not Available")
-
-                if (!EspressoIdlingResource.idlingResource.isIdleNow){
-                    EspressoIdlingResource.decrement()
-                }
-            }
-
-        })
-        return resultTvShows
-    }
-
 }
