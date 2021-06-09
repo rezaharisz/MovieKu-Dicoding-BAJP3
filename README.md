@@ -14,3 +14,4 @@ What i use in this project is :
 - Room Database
 - Paging 2
 - Retrofit
+- Online - Offline feature
